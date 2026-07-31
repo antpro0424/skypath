@@ -6,6 +6,9 @@ spring:
     # so offset-aware instants stay readable in API responses.
     serialization:
       write-dates-as-timestamps: false
+    generator:
+      # Emit 299.00 rather than 2.99E+2; prices must read as money.
+      write-bigdecimal-as-plain: true
 
 server:
   port: 8080

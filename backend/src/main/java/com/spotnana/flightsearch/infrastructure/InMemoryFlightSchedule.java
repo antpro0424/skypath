@@ -3,6 +3,7 @@ package com.spotnana.flightsearch.infrastructure;
 import com.spotnana.flightsearch.application.FlightRepository;
 import com.spotnana.flightsearch.domain.Airport;
 import com.spotnana.flightsearch.domain.Flight;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,10 +21,15 @@ public class InMemoryFlightSchedule implements FlightRepository {
 
     private final Map<String, Airport> airportsByCode;
     private final Map<String, List<Flight>> outgoingFlightsByOrigin;
+    private final List<Airport> airportsByCodeOrder;
 
     public InMemoryFlightSchedule(LoadedFlightSchedule schedule) {
         this.airportsByCode = schedule.airportsByCode();
         this.outgoingFlightsByOrigin = schedule.outgoingFlightsByOrigin();
+        this.airportsByCodeOrder =
+                schedule.airportsByCode().values().stream()
+                        .sorted(Comparator.comparing(Airport::code))
+                        .toList();
     }
 
     @Override
@@ -32,6 +38,11 @@ public class InMemoryFlightSchedule implements FlightRepository {
             return Optional.empty();
         }
         return Optional.ofNullable(airportsByCode.get(code.trim().toUpperCase(Locale.ROOT)));
+    }
+
+    @Override
+    public List<Airport> airports() {
+        return airportsByCodeOrder;
     }
 
     @Override

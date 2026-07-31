@@ -18,6 +18,9 @@ public interface FlightRepository {
     /** @param code an exact, already-normalized airport code */
     Optional<Airport> findAirport(String code);
 
+    /** Every known airport, ordered by code so the listing is stable between calls. */
+    List<Airport> airports();
+
     /**
      * Flights leaving the given airport, ordered by departure instant and then flight
      * number. Never null; an unknown airport yields an empty list.

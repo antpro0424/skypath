@@ -46,6 +46,13 @@ final class FixtureFlightRepository implements FlightRepository {
     }
 
     @Override
+    public List<Airport> airports() {
+        return airportsByCode.values().stream()
+                .sorted(Comparator.comparing(Airport::code))
+                .toList();
+    }
+
+    @Override
     public List<Flight> flightsDepartingFrom(String airportCode) {
         return outgoingByOrigin.getOrDefault(airportCode, List.of());
     }
