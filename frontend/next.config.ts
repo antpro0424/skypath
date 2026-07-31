@@ -1,24 +1,15 @@
 import type { NextConfig } from "next";
 
 /**
- * The browser only ever talks to the frontend origin. Requests to /api/* are
- * forwarded server-side to the backend container, so the Docker service hostname
- * never reaches client code and no CORS configuration is required.
+ * Requests to /api/* are proxied to the backend by the route handler in
+ * app/api/[...path]/route.ts, not by a rewrite here. Rewrite destinations are baked into
+ * the build output, so an environment variable used in one would be fixed at image build
+ * time rather than read when the container starts.
  */
-const backendUrl = process.env.BACKEND_INTERNAL_URL ?? "http://localhost:8080";
-
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   // Produces a self-contained server bundle, keeping the runtime image small.
   output: "standalone",
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${backendUrl}/api/:path*`,
-      },
-    ];
-  },
 };
 
 export default nextConfig;

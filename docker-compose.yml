@@ -1,0 +1,52 @@
+# Starts the whole application:
+#
+#   docker compose up --build      (or: docker-compose up --build)
+#
+# The interface is at http://localhost:3000. The API is also published on
+# http://localhost:8080 so it can be exercised directly with curl; in a real
+# deployment the backend would stay on the internal network only.
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: skypath-backend
+    ports:
+      - "8080:8080"
+    environment:
+      # Any Spring resource location works here, so an alternative schedule can be
+      # mounted and pointed at without rebuilding the image.
+      SKYPATH_DATASET_LOCATION: classpath:flights.json
+    healthcheck:
+      # Reaching this endpoint proves more than "the port is open": an unusable
+      # dataset fails context startup, so a healthy backend has really loaded the
+      # schedule.
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/api/v1/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 20s
+    networks:
+      - skypath
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: skypath-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      # Read per request by the proxy route handler, so this is genuine runtime
+      # configuration rather than a value baked into the image.
+      BACKEND_INTERNAL_URL: http://backend:8080
+    depends_on:
+      backend:
+        # Waits for the health check to pass, not merely for the container to
+        # start, so the first search cannot race a backend still loading.
+        condition: service_healthy
+    networks:
+      - skypath
+
+networks:
+  skypath:
+    driver: bridge

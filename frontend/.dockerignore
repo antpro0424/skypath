@@ -1,0 +1,13 @@
+# node_modules must never be copied from the host: native binaries built for macOS
+# would be carried into a Linux image. The deps stage installs them instead.
+node_modules/
+.next/
+out/
+coverage/
+
+.git/
+.gitignore
+.env*.local
+*.log
+.DS_Store
+.idea/
