@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: skypath-flight-search
+  jackson:
+    # Serialize java.time values as ISO-8601 strings rather than numeric timestamps,
+    # so offset-aware instants stay readable in API responses.
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.spotnana.flightsearch: INFO
