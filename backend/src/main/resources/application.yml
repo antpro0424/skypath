@@ -10,6 +10,12 @@ spring:
 server:
   port: 8080
 
+skypath:
+  dataset:
+    # Accepts any Spring resource location, so a container or test can override this
+    # with file:/path/to/flights.json without a code change.
+    location: classpath:flights.json
+
 logging:
   level:
     com.spotnana.flightsearch: INFO
