@@ -419,9 +419,14 @@ answer almost every query.
 ## Testing
 
 ```bash
-cd backend && ./mvnw test         # 106 tests
+cd backend  && ./mvnw test        # 106 tests
 cd frontend && npm test           # 28 tests
+cd frontend && npm run typecheck  # tsc over the whole project, tests included
 ```
+
+`next build` only type-checks files reachable from the app graph, so it does not cover
+`tests/`. `npm run typecheck` runs `tsc --noEmit` across everything in `tsconfig.json` and is
+the check to run in CI.
 
 **Backend (106).** Unit tests cover local-time-to-`Instant` conversion, same-zone and
 cross-zone durations, the date line, every quarantine reason, price precision, deterministic

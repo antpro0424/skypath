@@ -232,6 +232,9 @@ describe("API errors", () => {
   });
 
   it("does not crash when the error body is not JSON", async () => {
+    // Cast through unknown: a json() that only throws is inferred as returning
+    // Promise<never>, which does not overlap Response's Promise<any>, so a direct
+    // assertion is rejected by tsc.
     stubFetch(() =>
       Promise.resolve({
         ok: false,
@@ -239,7 +242,7 @@ describe("API errors", () => {
         json: async () => {
           throw new SyntaxError("Unexpected token");
         },
-      } as Response),
+      } as unknown as Response),
     );
 
     render(<FlightSearch />);
