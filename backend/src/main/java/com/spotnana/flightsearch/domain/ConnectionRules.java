@@ -19,5 +19,8 @@ public final class ConnectionRules {
     /** Upper bound on any single layover, regardless of connection type. */
     public static final Duration MAXIMUM_LAYOVER = Duration.ofHours(6);
 
+    /** Direct, one stop, or two stops: an itinerary may never exceed three flights. */
+    public static final int MAXIMUM_SEGMENTS = 3;
+
     private ConnectionRules() {}
 }
