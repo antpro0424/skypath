@@ -1,11 +1,12 @@
 # --- Java / Maven ---
+# The Maven Wrapper (.mvn/wrapper/*, mvnw, mvnw.cmd) is intentionally tracked so
+# the project builds on a clean machine with no Maven installation.
 target/
 *.class
 *.jar
 *.war
-!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/*.jar
 .mvn/timing.properties
-.mvn/wrapper/maven-wrapper.properties
 
 # --- Node / Next.js ---
 node_modules/
