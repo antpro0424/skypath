@@ -1,0 +1,47 @@
+# --- Java / Maven ---
+target/
+*.class
+*.jar
+*.war
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+build/
+next-env.d.ts
+*.tsbuildinfo
+coverage/
+.pnpm-store/
+
+# --- Playwright ---
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# --- Environment ---
+.env
+.env.local
+.env*.local
+
+# --- Editors / IDE ---
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# --- Local agent settings (machine-specific) ---
+.claude/settings.local.json
