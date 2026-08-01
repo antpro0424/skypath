@@ -1,0 +1,23 @@
+# Governs the backend image, which is built from the repository root so it can reach
+# flights.json. The frontend image is built from ./frontend and uses frontend/.dockerignore.
+
+# The backend build has no use for the web application.
+frontend/
+
+# Host build output must not enter the context: a locally compiled target/ can otherwise
+# be copied in and shadow what the build stage produces.
+backend/target/
+
+.git/
+.gitignore
+.dockerignore
+.claude/
+
+README.md
+CLAUDE.md
+instructions.md
+
+*.log
+.DS_Store
+.idea/
+*.iml

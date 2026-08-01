@@ -55,6 +55,37 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+
+      <!--
+        The schedule lives once, at the repository root, alongside docker-compose.yml.
+        It is copied onto the classpath during the build so tests, `spring-boot:run` and
+        the packaged jar all resolve `classpath:flights.json` without a second committed
+        copy that could drift. The copy is build output under target/ and is not tracked.
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-flight-dataset</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/..</directory>
+                  <includes>
+                    <include>flights.json</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>

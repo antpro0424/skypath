@@ -36,6 +36,23 @@ build needs network access to pull base images and dependencies.
 
 ---
 
+## Repository layout
+
+```text
+skypath/
+├── backend/            Java 17 · Spring Boot · Maven
+│   ├── Dockerfile      built from the repository root, see below
+│   └── src/
+├── frontend/           Next.js · React · TypeScript
+│   ├── Dockerfile
+│   └── app/, components/, lib/, tests/
+├── docker-compose.yml
+├── flights.json        the schedule — single source of truth
+└── README.md
+```
+
+---
+
 ## The interface
 
 One page. A search form (origin, destination, date), then results below it.
@@ -377,7 +394,23 @@ identical output.
 
 ---
 
-## The dataset has deliberate defects
+## The dataset
+
+`flights.json` lives at the repository root and is the single source of truth. There is one
+committed copy; the Maven build copies it onto the classpath during `process-resources`, so
+tests, `spring-boot:run` and the packaged jar all resolve `classpath:flights.json` without a
+second tracked file that could drift out of step. That generated copy is build output under
+`target/` and is not tracked.
+
+Because a Docker build context cannot reach outside itself, the backend image is built from
+the repository root (`context: .`, `dockerfile: backend/Dockerfile`) rather than from
+`backend/`. The in-image layout mirrors the repository so the same relative path resolves.
+
+The location is configurable through `skypath.dataset.location`, which accepts any Spring
+resource — `file:/path/to/flights.json` to point a container at a mounted schedule, or a
+fixture path in a test — so nothing is hard-coded to the classpath.
+
+### It has deliberate defects
 
 `flights.json` contains 303 flight records. Three are malformed, and the handling is
 deliberate rather than incidental.
